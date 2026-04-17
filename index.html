@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kivo Ultra V9 | معاذ ابوصبيع</title>
+    <title>Kivo Ultra V10 | معاذ ابوصبيع</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,9 +27,8 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
 
-        /* شاشة تسجيل الدخول المميزة */
-        #authView { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 25px; transition: 0.5s; }
-        .auth-card { background: var(--card); width: 100%; max-width: 380px; padding: 40px 30px; border-radius: 30px; text-align: center; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        /* شاشة الدخول */
+        #authView { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 25px; }
         
         .view { height: 100vh; display: none; padding: 20px 20px 100px; overflow-y: auto; }
         .view.active { display: block; animation: smoothSlideIn 0.4s ease-out; }
@@ -41,65 +40,66 @@
         #chatWindow.open { transform: translateX(0); }
         
         .chat-msgs { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; }
-        .bubble { max-width: 80%; padding: 12px; border-radius: 15px; margin-bottom: 10px; position: relative; }
+        .bubble { max-width: 80%; padding: 12px; border-radius: 15px; margin-bottom: 10px; position: relative; border: 1px solid #222; }
         .sent { align-self: flex-start; background: var(--sent); }
         .received { align-self: flex-end; background: var(--received); }
-        .bubble img { max-width: 100%; border-radius: 10px; margin-top: 8px; }
+        .bubble i.del-msg { position: absolute; top: 5px; left: 5px; font-size: 0.7rem; color: var(--danger); cursor: pointer; display: none; }
+        .bubble:hover i.del-msg { display: block; }
 
         .btn { width: 100%; padding: 15px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; background: var(--kivo-blue); color: white; font-size: 1.1rem; }
-        .btn-sub { background: #2a3942; color: var(--kivo-blue); width: auto; padding: 8px 18px; border-radius: 10px; }
-        .btn-sub.active { background: var(--kivo-blue); color: white; }
-
+        
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 15px 0 30px; border-top: 1px solid #333; z-index: 1000; }
-        .nav-item { color: var(--dim); text-align: center; font-size: 0.8rem; cursor: pointer; }
+        .nav-item { color: var(--dim); text-align: center; }
         .nav-item.active { color: var(--kivo-blue); }
-        .nav-item i { font-size: 1.8rem; display: block; margin-bottom: 5px; }
+        .nav-item i { font-size: 1.8rem; display: block; }
         
-        .add-btn { position: fixed; bottom: 110px; left: 20px; width: 60px; height: 60px; background: var(--kivo-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; z-index: 900; }
-
-        input { width: 100%; padding: 15px; border-radius: 15px; border: none; background: #2a3942; color: white; margin-bottom: 15px; font-size: 1rem; outline: none; }
-        
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 4500; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 4500; display: none; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s; }
         .modal.open { display: flex; }
-        .modal-content { background: var(--card); width: 100%; max-width: 340px; padding: 30px; border-radius: 25px; text-align: center; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-content { background: var(--card); width: 100%; max-width: 340px; padding: 30px; border-radius: 25px; text-align: center; border: 1px solid #333; }
+        
+        input { width: 100%; padding: 15px; border-radius: 15px; border: none; background: #2a3942; color: white; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
     <div id="authView">
-        <div class="auth-card">
-            <h1 style="color:var(--kivo-blue); font-size:2.5rem; font-weight:900; margin-bottom:10px;">KIVO</h1>
-            <p style="color:var(--dim); margin-bottom:30px;">نظام تواصل آمن ومتطور</p>
-            <input type="text" id="regUsername" placeholder="اسم المستخدم (بالإنجليزي)">
-            <button class="btn" onclick="Kivo.handleAuth()">دخول النظام</button>
+        <div class="modal-content">
+            <h1 style="color:var(--kivo-blue); font-weight:900;">KIVO V10</h1>
+            <br>
+            <input type="text" id="regUsername" placeholder="اسم المستخدم">
+            <button class="btn" onclick="Kivo.handleAuth()">دخول</button>
         </div>
     </div>
 
     <div id="appBody" style="display:none;">
         <div id="viewExplore" class="view active">
-            <h2 style="margin-bottom:20px; font-size:2rem;">القنوات</h2>
+            <h2>القنوات</h2><br>
             <div id="channelsGrid"></div>
-            <div class="add-btn" onclick="Kivo.openModal('createModal')"><i class="fas fa-plus"></i></div>
+            <div style="position:fixed; bottom:110px; left:20px; background:var(--kivo-blue); width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;" onclick="Kivo.openModal('createModal')"><i class="fas fa-plus"></i></div>
         </div>
 
         <div id="viewMail" class="view">
-            <h2 style="margin-bottom:20px; font-size:2rem;">بريدك</h2>
+            <h2>بريدك</h2><br>
             <div id="mailList"></div>
         </div>
 
         <div id="viewTrend" class="view">
-            <h2 style="margin-bottom:20px; font-size:2rem;">التريند 🔥</h2>
+            <h2>التريند 🔥</h2><br>
             <div id="trendGrid"></div>
         </div>
 
         <div id="viewProfile" class="view">
-            <div style="text-align:center; padding:20px;">
-                <div id="my_p_img" style="width:120px; height:120px; border-radius:50%; background:var(--kivo-blue); margin:0 auto 15px; overflow:hidden; border:4px solid var(--card);"></div>
-                <h2 id="my_p_name" style="font-size:2rem;">تحميل...</h2>
-            </div>
+            <div style="text-align:center;">
+                <div id="my_p_img" onclick="document.getElementById('profilePicUpload').click()" style="width:120px; height:120px; border-radius:50%; background:var(--kivo-blue); margin:0 auto 15px; overflow:hidden; border:4px solid #222; cursor:pointer;">
+                    <i class="fas fa-camera" style="margin-top:40px; font-size:2rem;"></i>
+                </div>
+                <input type="file" id="profilePicUpload" hidden accept="image/*" onchange="Kivo.uploadProfilePic(event)">
+                <h2 id="my_p_name">...</h2>
+            </div><br>
             <input type="text" id="in_name" placeholder="الاسم الظاهر">
-            <input type="text" id="in_img" placeholder="رابط صورتك المباشر">
-            <button class="btn" onclick="Kivo.saveProfile()">تحديث الملف</button>
+            <input type="text" id="in_bio" placeholder="وصف قصير عنك">
+            <button class="btn" onclick="Kivo.saveProfile()">حفظ التعديلات</button>
         </div>
 
         <nav class="bottom-nav">
@@ -110,26 +110,48 @@
         </nav>
     </div>
 
+    <div id="userCard" class="modal">
+        <div class="modal-content">
+            <div id="u_card_img" style="width:100px; height:100px; border-radius:50%; background:var(--kivo-blue); margin:0 auto 15px; overflow:hidden;"></div>
+            <h2 id="u_card_name">...</h2>
+            <p id="u_card_bio" style="color:var(--dim); margin-bottom:10px;"></p>
+            <p id="u_card_status"></p><br>
+            <button class="btn" onclick="Kivo.startDMFromCard()">بدء مراسلة</button>
+            <button onclick="Kivo.closeModal('userCard')" style="margin-top:10px; background:none; border:none; color:var(--dim);">رجوع</button>
+        </div>
+    </div>
+
     <div id="chatWindow">
-        <div style="padding:20px; background:var(--card); display:flex; align-items:center; gap:15px; border-bottom:1px solid #333;">
-            <i class="fas fa-arrow-right" onclick="Kivo.closeChat()" style="font-size:1.5rem; cursor:pointer;"></i>
-            <h3 id="chatTitle">المحادثة</h3>
+        <div style="padding:15px; background:var(--card); display:flex; align-items:center; gap:15px; border-bottom:1px solid #333;">
+            <i class="fas fa-arrow-right" onclick="Kivo.closeChat()"></i>
+            <h3 id="chatTitle" style="flex:1">المحادثة</h3>
+            <i class="fas fa-cog" id="ownerTools" style="display:none; color:var(--kivo-blue)" onclick="Kivo.openModal('editChanModal')"></i>
         </div>
         <div class="chat-msgs" id="chatMsgs"></div>
-        <div style="padding:15px 20px; background:var(--card); display:flex; gap:12px; align-items:center;">
-            <i class="fas fa-image" style="font-size:1.8rem; color:var(--kivo-blue); cursor:pointer;" onclick="document.getElementById('imgUpload').click()"></i>
-            <input type="file" id="imgUpload" accept="image/*" style="display:none;" onchange="Kivo.sendImage(event)">
-            <input type="text" id="msgInput" placeholder="رسالتك..." style="margin:0; flex:1;">
-            <button onclick="Kivo.sendTextMsg()" style="background:var(--kivo-blue); border:none; width:55px; height:55px; border-radius:15px; color:white; font-size:1.5rem;"><i class="fas fa-paper-plane"></i></button>
+        <div style="padding:15px; background:var(--card); display:flex; gap:10px;">
+            <i class="fas fa-image" style="font-size:1.5rem; margin-top:10px;" onclick="document.getElementById('imgUpload').click()"></i>
+            <input type="file" id="imgUpload" hidden accept="image/*" onchange="Kivo.sendImage(event)">
+            <input type="text" id="msgInput" placeholder="اكتب..." style="margin:0; flex:1;">
+            <button onclick="Kivo.sendTextMsg()" style="background:var(--kivo-blue); border:none; width:50px; border-radius:12px; color:white;"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <div id="editChanModal" class="modal">
+        <div class="modal-content">
+            <h3>إعدادات القناة</h3><br>
+            <input type="text" id="editChanName" placeholder="الاسم الجديد">
+            <button class="btn" onclick="Kivo.saveChanSettings()">حفظ</button>
+            <button class="btn" style="background:var(--danger); margin-top:10px;" onclick="Kivo.deleteChannel()">حذف القناة نهائياً</button>
+            <button onclick="Kivo.closeModal('editChanModal')" style="margin-top:10px; background:none; border:none; color:white;">إلغاء</button>
         </div>
     </div>
 
     <div id="createModal" class="modal">
         <div class="modal-content">
-            <h3>إنشاء قناة جديدة</h3><br>
+            <h3>إنشاء قناة</h3><br>
             <input type="text" id="newChanName" placeholder="اسم القناة">
             <button class="btn" onclick="Kivo.confirmCreateChan()">تأكيد</button>
-            <button onclick="Kivo.closeModal('createModal')" style="background:none; border:none; color:var(--dim); margin-top:15px;">إلغاء</button>
+            <button onclick="Kivo.closeModal('createModal')" style="margin-top:10px; background:none; border:none; color:white;">إلغاء</button>
         </div>
     </div>
 
@@ -139,181 +161,186 @@
         const db = firebase.database();
 
         const Kivo = {
-            user: JSON.parse(localStorage.getItem('kivo_secure_v9')) || null,
-            activeID: null,
-            isPrivate: false,
+            user: JSON.parse(localStorage.getItem('kivo_v10')) || null,
+            activeID: null, isPrivate: false, cardUser: null, currentCreator: null,
 
             init() {
                 if(this.user) {
                     document.getElementById('authView').style.display = 'none';
                     document.getElementById('appBody').style.display = 'block';
-                    this.updateStatus(true);
-                    this.loadChannels();
-                    this.loadMail();
-                    this.loadMyProfile();
+                    this.updateStatus(true); this.loadChannels(); this.loadMail(); this.loadMyProfile();
                 }
             },
 
             handleAuth() {
-                const username = document.getElementById('regUsername').value.trim().toLowerCase();
-                if(!username || username.length < 3) return alert("الرجاء إدخال اسم مستخدم صحيح");
-                
-                db.ref('users/' + username).once('value', s => {
-                    if(!s.exists()) {
-                        db.ref('users/' + username).set({ username, name: username, online: true });
-                    }
-                    this.user = { username };
-                    localStorage.setItem('kivo_secure_v9', JSON.stringify(this.user));
-                    this.init();
-                });
+                const u = document.getElementById('regUsername').value.trim().toLowerCase();
+                if(u.length < 3) return alert("الاسم قصير جداً");
+                this.user = { username: u };
+                localStorage.setItem('kivo_v10', JSON.stringify(this.user));
+                db.ref('users/' + u).once('value', s => { if(!s.exists()) db.ref('users/' + u).set({ username: u, name: u, online: true }); });
+                this.init();
             },
 
-            updateStatus(online) {
-                if(this.user) {
-                    db.ref('users/' + this.user.username + '/online').set(online);
-                    if(online) db.ref('users/' + this.user.username + '/online').onDisconnect().set(false);
-                }
-            },
-
+            updateStatus(s) { if(this.user) db.ref('users/'+this.user.username+'/online').set(s); },
             openModal(id) { document.getElementById(id).classList.add('open'); },
             closeModal(id) { document.getElementById(id).classList.remove('open'); },
-
-            switchView(view, el) {
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                document.getElementById('view' + view).classList.add('active');
-                el.classList.add('active');
-                if(view === 'Trend') this.loadTrending();
+            switchView(v, el) {
+                document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+                document.getElementById('view' + v).classList.add('active'); el.classList.add('active');
+                if(v === 'Trend') this.loadTrending();
             },
 
-            confirmCreateChan() {
-                const name = document.getElementById('newChanName').value.trim();
-                if(!name) return;
-                const id = 'ch_' + Date.now();
-                db.ref('channels/' + id).set({ id, name, creator: this.user.username, subCount: 0 });
-                this.closeModal('createModal');
+            uploadProfilePic(e) {
+                const f = e.target.files[0]; if(!f) return;
+                const r = new FileReader(); r.onload = (ev) => {
+                    const img = new Image(); img.onload = () => {
+                        const canvas = document.createElement('canvas'); canvas.width = 200; canvas.height = 200;
+                        canvas.getContext('2d').drawImage(img,0,0,200,200);
+                        const data = canvas.toDataURL('image/jpeg', 0.7);
+                        db.ref('users/'+this.user.username+'/avatar').set(data);
+                    }; img.src = ev.target.result;
+                }; r.readAsDataURL(f);
+            },
+
+            saveProfile() {
+                db.ref('users/'+this.user.username).update({
+                    name: document.getElementById('in_name').value,
+                    bio: document.getElementById('in_bio').value
+                }).then(() => alert("تم الحفظ"));
+            },
+
+            loadMyProfile() {
+                db.ref('users/'+this.user.username).on('value', s => {
+                    const d = s.val(); if(!d) return;
+                    document.getElementById('my_p_name').innerText = d.name || this.user.username;
+                    document.getElementById('in_name').value = d.name || '';
+                    document.getElementById('in_bio').value = d.bio || '';
+                    if(d.avatar) document.getElementById('my_p_img').innerHTML = `<img src="${d.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
+                });
             },
 
             loadChannels() {
                 db.ref('channels').on('value', s => {
-                    const grid = document.getElementById('channelsGrid');
-                    grid.innerHTML = '';
+                    const g = document.getElementById('channelsGrid'); g.innerHTML = '';
                     s.forEach(child => {
                         const c = child.val();
                         db.ref(`subs/${this.user.username}/${c.id}`).once('value', sub => {
-                            const isSub = sub.exists();
-                            grid.innerHTML += `
-                                <div class="item-card" onclick="Kivo.openChat('${c.id}', '${c.name}', false)">
-                                    <div><strong>${c.name}</strong><br><small>${c.subCount || 0} مشترك</small></div>
-                                    <button class="btn-sub ${isSub ? 'active' : ''}" onclick="event.stopPropagation(); Kivo.toggleSub('${c.id}', ${isSub})">
-                                        ${isSub ? 'تم الاشتراك' : 'اشتراك'}
-                                    </button>
-                                </div>`;
+                            const isS = sub.exists();
+                            g.innerHTML += `<div class="item-card" onclick="Kivo.openChat('${c.id}', '${c.name}', false, '${c.creator}')">
+                                <div><strong>${c.name}</strong><br><small>${c.subCount || 0} مشترك</small></div>
+                                <button class="btn" style="width:auto; padding:5px 15px; background:${isS?'#333':''}" onclick="event.stopPropagation(); Kivo.toggleSub('${c.id}', ${isS})">${isS?'تم':'اشتراك'}</button>
+                            </div>`;
                         });
                     });
                 });
             },
 
-            toggleSub(id, isSub) {
-                if(isSub) {
-                    db.ref(`subs/${this.user.username}/${id}`).remove();
-                    db.ref(`channels/${id}/subCount`).transaction(c => Math.max((c || 0) - 1, 0));
-                } else {
-                    db.ref(`subs/${this.user.username}/${id}`).set(true);
-                    db.ref(`channels/${id}/subCount`).transaction(c => (c || 0) + 1);
-                }
+            toggleSub(id, isS) {
+                if(isS) { db.ref(`subs/${this.user.username}/${id}`).remove(); db.ref(`channels/${id}/subCount`).transaction(n => (n||0)-1); }
+                else { db.ref(`subs/${this.user.username}/${id}`).set(true); db.ref(`channels/${id}/subCount`).transaction(n => (n||0)+1); }
             },
 
-            openChat(id, title, isPri) {
-                this.activeID = id; this.isPrivate = isPri;
+            openChat(id, title, isP, creator = null) {
+                this.activeID = id; this.isPrivate = isP; this.currentCreator = creator;
                 document.getElementById('chatWindow').classList.add('open');
                 document.getElementById('chatTitle').innerText = title;
-                let path = isPri ? this.getDMPath(this.user.username, id) : 'messages/' + id;
-                db.ref(path).off();
-                db.ref(path).on('value', s => {
-                    const box = document.getElementById('chatMsgs');
-                    box.innerHTML = '';
+                document.getElementById('ownerTools').style.display = (!isP && creator === this.user.username) ? 'block' : 'none';
+                
+                let p = isP ? this.getDMPath(this.user.username, id) : 'messages/' + id;
+                db.ref(p).off(); db.ref(p).on('value', s => {
+                    const b = document.getElementById('chatMsgs'); b.innerHTML = '';
                     s.forEach(child => {
-                        const d = child.val();
-                        const isMe = d.sender === this.user.username;
-                        const content = d.type === 'image' ? `<img src="${d.text}">` : d.text;
-                        box.innerHTML += `<div class="bubble ${isMe ? 'sent' : 'received'}"><strong>@${d.sender}</strong><br>${content}</div>`;
-                    });
-                    box.scrollTop = box.scrollHeight;
+                        const d = child.val(); const isMe = d.sender === this.user.username;
+                        const canDel = isMe || (this.currentCreator === this.user.username && !isP);
+                        b.innerHTML += `<div class="bubble ${isMe?'sent':'received'}">
+                            <strong onclick="Kivo.showUserCard('${d.sender}')">@${d.sender}</strong>
+                            ${canDel ? `<i class="fas fa-trash del-msg" onclick="Kivo.deleteMsg('${child.key}')"></i>` : ''}
+                            <br>${d.type==='image'?`<img src="${d.text}" style="max-width:100%; border-radius:10px">`:d.text}
+                        </div>`;
+                    }); b.scrollTop = b.scrollHeight;
                 });
             },
 
+            deleteMsg(msgKey) {
+                if(!confirm("حذف الرسالة؟")) return;
+                let p = this.isPrivate ? this.getDMPath(this.user.username, this.activeID) : 'messages/' + this.activeID;
+                db.ref(p + '/' + msgKey).remove();
+            },
+
+            showUserCard(u) {
+                this.cardUser = u;
+                db.ref('users/'+u).once('value', s => {
+                    const d = s.val();
+                    document.getElementById('u_card_name').innerText = d.name || u;
+                    document.getElementById('u_card_bio').innerText = d.bio || 'لا يوجد وصف';
+                    document.getElementById('u_card_status').innerText = d.online ? 'متصل الآن 🟢' : 'غير متصل ⚪';
+                    document.getElementById('u_card_img').innerHTML = d.avatar ? `<img src="${d.avatar}" style="width:100%; height:100%; object-fit:cover;">` : '';
+                    this.openModal('userCard');
+                });
+            },
+
+            startDMFromCard() {
+                this.closeModal('userCard');
+                this.openChat(this.cardUser, '@'+this.cardUser, true);
+                db.ref(`user_chats/${this.user.username}/${this.cardUser}`).set(true);
+                db.ref(`user_chats/${this.cardUser}/${this.user.username}`).set(true);
+            },
+
+            getDMPath(u1, u2) { const s = [u1, u2].sort(); return `direct_messages/${s[0]}_${s[1]}`; },
+
+            confirmCreateChan() {
+                const n = document.getElementById('newChanName').value.trim(); if(!n) return;
+                const id = 'ch_'+Date.now(); db.ref('channels/'+id).set({ id, name: n, creator: this.user.username, subCount: 0 });
+                this.closeModal('createModal');
+            },
+
+            saveChanSettings() {
+                const n = document.getElementById('editChanName').value.trim();
+                if(n) { db.ref('channels/'+this.activeID).update({ name: n }); this.closeModal('editChanModal'); }
+            },
+
+            deleteChannel() {
+                if(confirm("حذف القناة نهائياً؟")) {
+                    db.ref('channels/'+this.activeID).remove(); db.ref('messages/'+this.activeID).remove();
+                    this.closeChat(); this.closeModal('editChanModal');
+                }
+            },
+
             sendTextMsg() {
-                const txt = document.getElementById('msgInput').value.trim();
-                if(!txt) return;
-                this.pushMsg(txt, 'text');
-                document.getElementById('msgInput').value = '';
+                const t = document.getElementById('msgInput').value.trim(); if(!t) return;
+                this.pushMsg(t, 'text'); document.getElementById('msgInput').value = '';
             },
 
             sendImage(e) {
-                const file = e.target.files[0];
-                if(!file) return;
-                const r = new FileReader();
-                r.onload = (ev) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = 600; canvas.height = (img.height * 600) / img.width;
-                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                        this.pushMsg(canvas.toDataURL('image/jpeg', 0.6), 'image');
-                    };
-                    img.src = ev.target.result;
-                };
-                r.readAsDataURL(file);
+                const f = e.target.files[0]; if(!f) return;
+                const r = new FileReader(); r.onload = (ev) => {
+                    const img = new Image(); img.onload = () => {
+                        const c = document.createElement('canvas'); c.width = 500; c.height = (img.height*500)/img.width;
+                        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+                        this.pushMsg(c.toDataURL('image/jpeg', 0.6), 'image');
+                    }; img.src = ev.target.result;
+                }; r.readAsDataURL(f);
             },
 
-            pushMsg(content, type) {
-                let path = this.isPrivate ? this.getDMPath(this.user.username, this.activeID) : 'messages/' + this.activeID;
-                db.ref(path).push({ sender: this.user.username, text: content, type, time: Date.now() });
-            },
-
-            getDMPath(u1, u2) {
-                const s = [u1, u2].sort();
-                return `direct_messages/${s[0]}_${s[1]}`;
+            pushMsg(c, t) {
+                let p = this.isPrivate ? this.getDMPath(this.user.username, this.activeID) : 'messages/' + this.activeID;
+                db.ref(p).push({ sender: this.user.username, text: c, type: t, time: Date.now() });
             },
 
             loadMail() {
-                db.ref('user_chats/' + this.user.username).on('value', s => {
-                    const list = document.getElementById('mailList');
-                    list.innerHTML = '';
-                    s.forEach(child => {
-                        list.innerHTML += `<div class="item-card" onclick="Kivo.openChat('${child.key}', '@${child.key}', true)">@${child.key}</div>`;
-                    });
+                db.ref('user_chats/'+this.user.username).on('value', s => {
+                    const l = document.getElementById('mailList'); l.innerHTML = '';
+                    s.forEach(c => l.innerHTML += `<div class="item-card" onclick="Kivo.openChat('${c.key}', '@${c.key}', true)">@${c.key}</div>`);
                 });
             },
 
             loadTrending() {
                 db.ref('channels').once('value', s => {
-                    const grid = document.getElementById('trendGrid');
-                    let arr = []; s.forEach(c => arr.push(c.val()));
-                    arr.sort((a,b) => (b.subCount || 0) - (a.subCount || 0));
-                    grid.innerHTML = '';
-                    arr.forEach((c, i) => grid.innerHTML += `<div class="item-card">#${i+1} ${c.name} <span>${c.subCount}</span></div>`);
+                    const g = document.getElementById('trendGrid'); let a = []; s.forEach(c => a.push(c.val()));
+                    a.sort((x,y) => (y.subCount||0)-(x.subCount||0)); g.innerHTML = '';
+                    a.forEach((c, i) => g.innerHTML += `<div class="item-card">#${i+1} ${c.name} (${c.subCount||0})</div>`);
                 });
-            },
-
-            loadMyProfile() {
-                db.ref('users/' + this.user.username).on('value', s => {
-                    const d = s.val();
-                    if(d) {
-                        document.getElementById('my_p_name').innerText = d.name || this.user.username;
-                        document.getElementById('in_name').value = d.name || '';
-                        document.getElementById('in_img').value = d.avatar || '';
-                        if(d.avatar) document.getElementById('my_p_img').innerHTML = `<img src="${d.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
-                    }
-                });
-            },
-
-            saveProfile() {
-                db.ref('users/' + this.user.username).update({
-                    name: document.getElementById('in_name').value,
-                    avatar: document.getElementById('in_img').value
-                }).then(() => alert("تم التحديث"));
             },
 
             closeChat() { document.getElementById('chatWindow').classList.remove('open'); }
@@ -322,4 +349,4 @@
         Kivo.init();
     </script>
 </body>
-</html>
+    </html>
